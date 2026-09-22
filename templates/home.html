@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}ShowBook | Home{% endblock %}
+{% block content %}
+<div class="hero-section">
+  <div class="container py-5">
+    <div class="row align-items-center">
+      <div class="col-lg-8">
+        <div class="badge-soft mb-3">Trending this week</div>
+        <h1>Book Your Next Experience</h1>
+        <p class="lead text-light">Discover movies, concerts, comedy nights, theatre, and live events in your city.</p>
+        <form class="d-flex gap-2 mt-4 flex-wrap" method="get" action="{% url 'search_results' %}">
+          <input type="text" name="q" class="form-control form-control-lg search-box" placeholder="Search movies, shows, concerts and events..." />
+          <select class="form-select form-select-lg search-box" name="city" style="max-width: 180px;">
+            <option value="">Select city</option>
+            <option>Jaipur</option>
+            <option>Delhi</option>
+            <option>Mumbai</option>
+            <option>Bangalore</option>
+            <option>Hyderabad</option>
+          </select>
+          <button class="btn btn-primary btn-lg" type="submit">Search</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container my-5">
+  <div class="section-head">
+    <h2 class="section-title">Trending Now</h2>
+    <span class="badge-soft">Updated daily</span>
+  </div>
+  <div class="row g-4">
+    {% for show in shows %}
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="movie-card h-100">
+          <a href="{% url 'show_detail' show.pk %}">
+            {% if show.poster and show.poster.url %}
+              <img src="{{ show.poster.url }}" alt="{{ show.title }}" class="movie-poster" loading="lazy" />
+            {% elif show.poster_url %}
+              <img src="{{ show.poster_url }}" alt="{{ show.title }}" class="movie-poster" loading="lazy" />
+            {% else %}
+              <img src="{% static 'images/movie-placeholder.svg' %}" alt="{{ show.title }}" class="movie-poster" />
+            {% endif %}
+          </a>
+          <div class="movie-card-body">
+            <h5>{{ show.title }}</h5>
+            <p>{{ show.category }} • {{ show.language }}</p>
+            <div class="d-flex justify-content-between small text-muted mt-2">
+              <span>⭐ {{ show.rating }}</span>
+              <span>{{ show.genre }}</span>
+            </div>
+            <a href="{% url 'show_detail' show.pk %}" class="btn btn-primary btn-sm mt-3 w-100">Book Now</a>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <p>No shows available yet.</p>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="container my-5">
+  <div class="section-head">
+    <h2 class="section-title">Explore Categories</h2>
+  </div>
+  <div class="row g-4">
+    <div class="col-md-3"><div class="info-panel text-center"><h5>🎬 Movies</h5><p>Blockbusters & classics</p></div></div>
+    <div class="col-md-3"><div class="info-panel text-center"><h5>🎤 Concerts</h5><p>Live sound & big stages</p></div></div>
+    <div class="col-md-3"><div class="info-panel text-center"><h5>🎭 Theatre</h5><p>Drama & stage shows</p></div></div>
+    <div class="col-md-3"><div class="info-panel text-center"><h5>🎪 Events</h5><p>Festivals & special nights</p></div></div>
+  </div>
+</div>
+
+<div class="container my-5">
+  <div class="section-head">
+    <h2 class="section-title">Popular Movies</h2>
+  </div>
+  <div class="row g-4">
+    {% for show in movies %}
+      <div class="col-md-3">
+        <div class="movie-card h-100">
+          <a href="{% url 'show_detail' show.pk %}">
+            {% if show.poster and show.poster.url %}
+              <img src="{{ show.poster.url }}" alt="{{ show.title }}" class="movie-poster" loading="lazy" />
+            {% elif show.poster_url %}
+              <img src="{{ show.poster_url }}" alt="{{ show.title }}" class="movie-poster" loading="lazy" />
+            {% else %}
+              <img src="{% static 'images/movie-placeholder.svg' %}" alt="{{ show.title }}" class="movie-poster" loading="lazy" />
+            {% endif %}
+          </a>
+          <div class="movie-card-body">
+            <h6>{{ show.title }}</h6>
+            <small>{{ show.language }} • {{ show.genre }}</small>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="container my-5">
+  <div class="section-head">
+    <h2 class="section-title">Upcoming Events</h2>
+  </div>
+  <div class="row g-4">
+    {% for show in events %}
+      <div class="col-md-4">
+        <div class="info-panel h-100">
+          <div class="badge-soft mb-2">Event</div>
+          <h5>{{ show.title }}</h5>
+          <p>{{ show.category }} • {{ show.genre }}</p>
+          <p class="mb-0 text-muted">{{ show.language }}</p>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="container my-5">
+  <div class="section-head">
+    <h2 class="section-title">Popular Venues</h2>
+  </div>
+  <div class="row g-4">
+    {% for venue in venues %}
+      <div class="col-md-3">
+        <div class="info-panel h-100">
+          <h5><a class="text-light" href="{% url 'venue_detail' venue.pk %}">{{ venue.name }}</a></h5>
+          <p>{{ venue.city }}</p>
+          <small class="text-muted">{{ venue.address }}</small>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="container my-5">
+  <div class="feature-band">
+    <div><span class="badge-soft">The ShowBook promise</span><h2 class="section-title mt-3">Everything worth going out for.</h2><p class="mb-0 text-muted">Fast booking, secure payments, easy cancellation, and instant tickets in one place.</p></div>
+    <div class="feature-grid"><span>⚡ Fast booking</span><span>🔒 Secure checkout</span><span>↩ Easy cancellation</span><span>🎟 Instant ticket</span></div>
+  </div>
+</div>
+
+<div class="container my-5">
+  <div class="newsletter-band"><div><h2>Stay in the know</h2><p class="mb-0">Get the best new releases and events in your city.</p></div><form class="d-flex gap-2"><input class="form-control" type="email" placeholder="Your email address" required><button class="btn btn-primary" type="submit">Subscribe</button></form></div>
+</div>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ category|title }} | ShowBook{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <div class="catalog-header mb-4">
+    <span class="badge-soft">{{ city }} experiences</span>
+    <h1 class="display-5 fw-bold mt-3">{% if category == 'movies' %}Movies{% elif category == 'shows' %}Live Shows{% elif category == 'events' %}Events{% else %}{{ category|title }}{% endif %}</h1>
+    <p class="text-muted">Find something memorable to do next.</p>
+  </div>
+  <form class="filter-bar row g-2 mb-4" method="get">
+    <div class="col-md-5"><input class="form-control" name="q" value="{{ query }}" placeholder="Search this collection..."></div>
+    <div class="col-md-3"><select class="form-select" name="genre"><option value="">All genres</option><option>Action</option><option>Comedy</option><option>Drama</option><option>Sci-Fi</option><option>Music</option><option>Sports</option></select></div>
+    <div class="col-md-2"><select class="form-select" name="language"><option value="">All languages</option><option>English</option><option>Hindi</option><option>Tamil</option><option>Telugu</option></select></div>
+    <div class="col-md-2"><select class="form-select" name="sort"><option value="rating">Popular</option><option value="newest">Newest</option></select></div>
+  </form>
+  <div class="row g-4">
+    {% for show in shows %}
+      <div class="col-6 col-md-4 col-lg-3">
+        <article class="movie-card h-100">
+          <a href="{% url 'show_detail' show.pk %}">
+            {% if show.poster and show.poster.url %}<img src="{{ show.poster.url }}" class="movie-poster" alt="{{ show.title }}" loading="lazy">
+            {% elif show.poster_url %}<img src="{{ show.poster_url }}" class="movie-poster" alt="{{ show.title }}" loading="lazy">
+            {% else %}<img src="{% static 'images/movie-placeholder.svg' %}" class="movie-poster" alt="{{ show.title }}" loading="lazy">{% endif %}
+          </a>
+          <div class="movie-card-body">
+            <div class="d-flex justify-content-between gap-2"><h5>{{ show.title }}</h5><span class="rating">★ {{ show.rating }}</span></div>
+            <p>{{ show.language }} · {{ show.genre }}</p>
+            <p class="price-line">From ₹250</p>
+            <a href="{% url 'show_detail' show.pk %}" class="btn btn-primary btn-sm w-100">Book Now</a>
+          </div>
+        </article>
+      </div>
+    {% empty %}<div class="col-12"><div class="empty-state"><h3>No results found</h3><p>Try another title, genre, or city.</p><a href="{% url 'home' %}" class="btn btn-primary">Back Home</a></div></div>{% endfor %}
+  </div>
+</div>
+{% endblock %}

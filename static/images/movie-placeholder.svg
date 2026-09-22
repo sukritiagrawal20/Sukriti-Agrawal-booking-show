@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 900" role="img" aria-label="Movie poster placeholder">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#1f2937"/>
+      <stop offset="100%" stop-color="#4f46e5"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="900" fill="url(#bg)" rx="24"/>
+  <rect x="70" y="110" width="460" height="560" rx="18" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.28)"/>
+  <circle cx="300" cy="250" r="90" fill="rgba(255,255,255,0.12)"/>
+  <path d="M220 400c48-78 112-118 180-118 57 0 116 24 140 63v218H160V400h60z" fill="rgba(255,255,255,0.18)"/>
+  <text x="300" y="760" text-anchor="middle" font-family="Arial, sans-serif" font-size="56" font-weight="700" fill="#ffffff">ShowBook</text>
+  <text x="300" y="820" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" fill="#dbeafe">Movie Poster</text>
+</svg>

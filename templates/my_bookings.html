@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}My Bookings{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <h2>My Bookings</h2>
+  {% if bookings %}
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Booking ID</th>
+            <th>Show</th>
+            <th>Venue</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Seats</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for booking in bookings %}
+            <tr>
+              <td>{{ booking.booking_id }}</td>
+              <td>{{ booking.show_timing.show.title }}</td>
+              <td>{{ booking.show_timing.venue.name }}</td>
+              <td>{{ booking.show_timing.date }}</td>
+              <td>{{ booking.show_timing.start_time }}</td>
+              <td>{% for seat in booking.booked_seats.all %}{{ seat.seat.seat_number }} {% endfor %}</td>
+              <td>₹{{ booking.total_amount }}</td>
+              <td>{{ booking.booking_status }}</td>
+              <td>
+                <a href="{% url 'confirmation' booking.booking_id %}" class="btn btn-sm btn-primary">View Ticket</a>
+                {% if booking.booking_status != 'Cancelled' %}
+                  <a href="{% url 'cancel_booking' booking.booking_id %}" class="btn btn-sm btn-outline-danger">Cancel</a>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="alert alert-info">No bookings yet.</div>
+  {% endif %}
+</div>
+{% endblock %}

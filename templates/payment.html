@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}Payment{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <div class="payment-card mx-auto" style="max-width: 760px;">
+    <h2 class="mb-4">Payment</h2>
+    <div class="row g-4">
+      <div class="col-lg-7">
+        <div class="info-panel">
+          <div class="summary-row"><span>Show</span><strong>{{ booking.show_timing.show.title }}</strong></div>
+          <div class="summary-row"><span>Venue</span><strong>{{ booking.show_timing.venue.name }}</strong></div>
+          <div class="summary-row"><span>Date</span><strong>{{ booking.show_timing.date }}</strong></div>
+          <div class="summary-row"><span>Time</span><strong>{{ booking.show_timing.start_time }}</strong></div>
+          <div class="summary-row"><span>Seats</span><strong>{% for seat in booking.booked_seats.all %}{{ seat.seat.seat_number }} {% endfor %}</strong></div>
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <div class="ticket-box">
+          <div class="summary-row"><span>Ticket</span><strong>₹{{ booking.total_amount }}</strong></div>
+          <div class="summary-row"><span>Convenience</span><strong>₹50</strong></div>
+          <div class="summary-row"><span>GST</span><strong>₹48</strong></div>
+          <hr>
+          <div class="summary-row"><span>Total</span><strong>₹{{ booking.total_amount }}</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-4">
+      <h5>Payment Method</h5>
+      <div class="payment-option"><input type="radio" checked> UPI</div>
+      <div class="payment-option"><input type="radio"> Card</div>
+      <div class="payment-option"><input type="radio"> Net Banking</div>
+    </div>
+
+    <form method="post" action="{% url 'payment_verify' %}" class="mt-4">
+      {% csrf_token %}
+      <input type="hidden" name="booking_id" value="{{ booking.booking_id }}" />
+      <input type="hidden" name="razorpay_order_id" value="{{ order.id }}" />
+      <input type="hidden" name="razorpay_payment_id" value="mock_payment_{{ booking.booking_id }}" />
+      <input type="hidden" name="razorpay_signature" value="mock_signature" />
+      <button type="submit" class="btn btn-primary btn-lg w-100">Pay Now</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

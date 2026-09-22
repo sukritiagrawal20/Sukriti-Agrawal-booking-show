@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Booking Confirmed{% endblock %}
+{% block content %}
+<div class="container py-5 text-center">
+  <h1 class="text-success">🎉 Booking Confirmed!</h1>
+  <div class="card mx-auto my-4 p-4 shadow-sm" style="max-width: 700px;">
+    <p><strong>Booking ID:</strong> {{ booking.booking_id }}</p>
+    <p><strong>Show:</strong> {{ booking.show_timing.show.title }}</p>
+    <p><strong>Venue:</strong> {{ booking.show_timing.venue.name }}</p>
+    <p><strong>Date:</strong> {{ booking.show_timing.date }}</p>
+    <p><strong>Time:</strong> {{ booking.show_timing.start_time }}</p>
+    <p><strong>Seats:</strong> {% for seat in booking.booked_seats.all %}{{ seat.seat.seat_number }} {% endfor %}</p>
+    <p><strong>Amount Paid:</strong> ₹{{ booking.total_amount }}</p>
+    <p><strong>Payment ID:</strong> {{ booking.payment_id }}</p>
+    <img src="{% url 'ticket_qr' booking.booking_id %}" alt="QR Code" class="my-3 qr-code" />
+    <div class="d-flex justify-content-center gap-2 flex-wrap">
+      <a href="{% url 'ticket_pdf' booking.booking_id %}" class="btn btn-outline-primary">Download Ticket</a>
+      <a href="{% url 'my_bookings' %}" class="btn btn-primary">View My Booking</a>
+      <a href="{% url 'home' %}" class="btn btn-secondary">Back to Home</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

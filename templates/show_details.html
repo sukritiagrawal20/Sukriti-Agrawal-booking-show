@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ show.title }}{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <div class="detail-hero row g-0 align-items-stretch">
+    <div class="col-lg-4">
+      {% if show.poster and show.poster.url %}
+        <img src="{{ show.poster.url }}" class="detail-poster" alt="{{ show.title }}">
+      {% elif show.poster_url %}
+        <img src="{{ show.poster_url }}" class="detail-poster" alt="{{ show.title }}">
+      {% else %}
+        <img src="{% static 'images/movie-placeholder.svg' %}" class="detail-poster" alt="{{ show.title }}">
+      {% endif %}
+    </div>
+    <div class="col-lg-8 p-4 p-lg-5">
+      <div class="badge-soft mb-3">{{ show.category }}</div>
+      <h1 class="display-5 fw-bold mb-3">{{ show.title }}</h1>
+      <div class="meta-list">
+        <span class="meta-pill">⭐ {{ show.rating }}</span>
+        <span class="meta-pill">{{ show.genre }}</span>
+        <span class="meta-pill">{{ show.language }}</span>
+        <span class="meta-pill">{{ show.duration }} min</span>
+      </div>
+      <p class="lead text-light">{{ show.description }}</p>
+      <div class="info-panel mt-4">
+        <div class="summary-row"><span>Venue</span><strong>{{ timings.0.venue.name|default:'INOX Jaipur' }}</strong></div>
+        <div class="summary-row"><span>Address</span><strong>{{ timings.0.venue.address|default:'Jaipur, Rajasthan' }}</strong></div>
+        <div class="summary-row"><span>Available timings</span><strong>{{ timings|length }} sessions</strong></div>
+      </div>
+      <a href="{% if timings %}{% url 'select_seats' timings.0.pk %}{% else %}#{% endif %}" class="btn btn-primary btn-lg mt-4">Book Tickets</a>
+    </div>
+  </div>
+
+  <div class="mt-5">
+    <h3 class="mb-3">Available Show Timings</h3>
+    <div class="row g-3">
+      {% for timing in timings %}
+        <div class="col-md-6 col-xl-4">
+          <div class="info-panel h-100">
+            <div class="summary-row"><span>Date</span><strong>{{ timing.date }}</strong></div>
+            <div class="summary-row"><span>Time</span><strong>{{ timing.start_time }} - {{ timing.end_time }}</strong></div>
+            <div class="summary-row"><span>Venue</span><strong>{{ timing.venue.name }}</strong></div>
+            <a href="{% url 'select_seats' timing.pk %}" class="btn btn-primary w-100 mt-3">Book This Show</a>
+          </div>
+        </div>
+      {% empty %}
+        <div class="col-12"><div class="info-panel">No timings currently available.</div></div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}
